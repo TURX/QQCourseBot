@@ -2,17 +2,41 @@
 
 copyright by &copy; TURX, licensed by GPL v3.
 
-## Function
+## Functions
 
-- Auto repeat others' one-word message within several repetitions.
-- Auto send an one-word message when asked by "please send" or "please send me."
-- Auto respond when being mentioned by others.
+- Auto repeat others' one-word message within several repetitions. (1.0)
+- Auto send an one-word message when asked by "please send" or "please send me." (1.0)
+- Auto respond when being mentioned by others. (1.0)
+- Support multiple groups. (1.1)
+
+## Screenshots
+
+Repetition in English:
+
+![Repetition in English](img/1.png)
+
+Repetition in Chinese:
+
+![Repetition in Chinese](img/2.png)
+
+Reply when Mentioned:
+
+![Mentioned](img/3.png)
+
+Response when Asked:
+
+![Response](img/4.png)
+
+Console Warning:
+
+![Console](img/5.png)
 
 ## Dependencies
 
 - .NET Core
 - CoolQ
 - cqhttp.Cyan (a C# wrapper for cqhttp)
+- Docker (for non-Windows systems)
 
 ## Usage
 
