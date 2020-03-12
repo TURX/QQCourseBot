@@ -5,14 +5,14 @@ using cqhttp.Cyan.Events.CQResponses;
 using cqhttp.Cyan.Enums;
 using cqhttp.Cyan.Messages;
 using cqhttp.Cyan.Messages.CQElements;
+using System.Collections.Generic;
 
 namespace QQCourseBot
 {
     public class Program
     {
         public static string[] response;
-        public static string LastMessage = string.Empty;
-        public static int MessageCount = 1;
+        public static Dictionary<long, GroupInfo> Groups = new Dictionary<long, GroupInfo>();
         public static int RepeatCount = 5;
         public static Random random = new Random();
         public static string License = "Copyright (C) 2020  Ruixuan Tu\nThis program comes with ABSOLUTELY NO WARRANTY with GNU GPL v3 license. This is free software, and you are welcome to redistribute it under certain conditions; go to https://www.gnu.org/licenses/gpl-3.0.html for details.";
@@ -26,10 +26,12 @@ namespace QQCourseBot
             };
             RepeatCount = random.Next(1, 10);
         }
+
         public static string Mentioned()
         {
             return response[random.Next(0, response.Length)];
         }
+
         public static void Main()
         {
             Console.WriteLine("QQ Course Bot");
@@ -49,19 +51,23 @@ namespace QQCourseBot
                 {
                     var me = (e as GroupMessageEvent);
                     string ThisMessage = me.message.ToString().ToLower();
-                    if (ThisMessage == LastMessage && !ThisMessage.Contains(' '))
+                    if (!Groups.ContainsKey(me.group_id))
                     {
-                        MessageCount++;
+                        Groups.Add(me.group_id, new GroupInfo());
+                    }
+                    if (ThisMessage == Groups[me.group_id].LastMessage && !ThisMessage.Contains(' '))
+                    {
+                        Groups[me.group_id].MessageCount++;
                     }
                     else
                     {
-                        MessageCount = 1;
+                        Groups[me.group_id].MessageCount = 1;
                     }
-                    LastMessage = me.message.ToString().ToLower();
-                    Console.WriteLine("MessageCount: " + MessageCount);
+                    Groups[me.group_id].LastMessage = me.message.ToString().ToLower();
+                    Console.WriteLine("[INFO] MessageCount: " + Groups[me.group_id].MessageCount + "; GroupID: " + me.group_id + "; Message: " + ThisMessage);
                     if (ThisMessage.Contains(PersonalInfo.name) || ThisMessage.Contains("@" + PersonalInfo.nickname))
                     {
-                        Console.WriteLine("You have been mentioned!!!");
+                        Console.WriteLine("[WARNING] You have been mentioned!!!");
                         await client.SendMessageAsync(
                             MessageType.group_,
                             me.group_id,
@@ -80,7 +86,7 @@ namespace QQCourseBot
                         {
                             if (ThisMessage[end] == ' ')
                             {
-                                Console.WriteLine("Send: " + ThisMessage.Substring(start, end - start));
+                                Console.WriteLine("[RESPOND] Send: " + ThisMessage.Substring(start, end - start));
                                 await client.SendMessageAsync(
                                     MessageType.group_,
                                     me.group_id,
@@ -94,7 +100,7 @@ namespace QQCourseBot
                         }
                         if (flagSent == false)
                         {
-                            Console.WriteLine("Send: " + ThisMessage.Substring(start, ThisMessage.Length - start));
+                            Console.WriteLine("[RESPOND] Send: " + ThisMessage.Substring(start, ThisMessage.Length - start));
                             await client.SendMessageAsync(
                                 MessageType.group_,
                                 me.group_id,
@@ -104,9 +110,9 @@ namespace QQCourseBot
                             );
                         }
                     }
-                    if (MessageCount == RepeatCount)
+                    if (Groups[me.group_id].MessageCount > RepeatCount)
                     {
-                        Console.WriteLine("Repeat: " + ThisMessage);
+                        Console.WriteLine("[RESPOND] Repeat: " + ThisMessage);
                         await client.SendMessageAsync(
                             MessageType.group_,
                             me.group_id,
