@@ -404,5 +404,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-# Personal Info
-QQCourseBot/PersonalInfo.cs
+# Config
+*.config.json
+

@@ -5,9 +5,11 @@ copyright by &copy; TURX, licensed by GPL v3.
 ## Functions
 
 - Auto repeat others' one-word message within several repetitions. (1.0)
-- Auto send an one-word message when asked by "please send" or "please send me." (1.0)
-- Auto respond when being mentioned by others. (1.0)
+- Auto send an one-word message when asked by "please send", "please send me" (1.0), "please send me a", "please send me an", or "please send me one." (1.2)
+- Auto respond when being mentioned (1.0) or at (1.2) by others.
 - Support multiple groups. (1.1)
+- Support JSON configuration. (1.2)
+- Support QQ group whitelist. (1.2)
 
 ## Screenshots
 
@@ -40,7 +42,7 @@ Console Warning:
 
 ## Usage
 
-You can go to [releases](https://github.com/TURX/QQCourseBot/releases) to download a compiled binary file with default personal info, or you should compile the code for your own situation (for more, read Building and Customization sections).
+You can go to [releases](https://github.com/TURX/QQCourseBot/releases) to download a compiled binary file or you can compile the code for your own situation (for more, read Building section).
 
 ```sh
 docker pull richardchien/cqhttp:latest # pull the customized CoolQ image to local
@@ -65,20 +67,47 @@ cd /path/to/sln/QQCourseBot/bin/Release/netcoreapp{VERSION}/publish # change to 
 dotnet QQCourseBot.dll # run
 ```
 
-## Customization
+## Configuration
 
-1. Create QQCourseBot/PersonalInfo.cs
-2. Use the following code to create the class
+The json files will be generated if not exist in first run:
 
-```csharp
-namespace QQCourseBot
+- personal.config.json:
+
+Set "Name" to your lowercased real name, "QQ" to your QQ ID.
+
+```json
 {
-    public class PersonalInfo
-    {
-        public static string name = "testname"; // real name
-        public static string nickname = "testnick"; // QQ nickname
-    }
+    "Name": "testname",
+    "QQ": "123456789"
 }
 ```
 
-3. Build the project and enjoy
+- response.config.json:
+
+Set responses to send when being mentioned.
+
+```json
+[
+    "My internet is poor.",
+    "I am restarting my router.",
+    "My device has no battery now."
+]
+```
+
+- whitelist.config.json:
+
+Use the following (default) configuration to disable the whitelist function:
+
+```json
+[]
+```
+
+Use the following configuration (with whitelisted QQ group IDs) to enable the whitelist function:
+
+```json
+[
+    123456789,
+    234567891,
+    345678912
+]
+```
