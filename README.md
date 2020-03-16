@@ -10,6 +10,7 @@ copyright by &copy; TURX, licensed by GPL v3.
 - Support multiple groups. (1.1)
 - Support JSON configuration. (1.2)
 - Support QQ group whitelist. (1.2)
+- Auto join Tencent Meeting (support both quick meeting and scheduled meeting and multiple sharing methods) (1.3)
 
 ## Screenshots
 
@@ -33,12 +34,21 @@ Console Warning:
 
 ![Console](img/5.png)
 
+Auto Joining of Tencent Meetings (app scheduled and text quick):
+
+![Meeting](img/6.png)
+
+Auto Joining of Tencent Meetings (link only and text scheduled):
+
+![Meeting](img/7.png)
+
 ## Dependencies
 
 - .NET Core
 - CoolQ
 - cqhttp.Cyan (a C# wrapper for cqhttp)
-- Docker (for non-Windows systems)
+- Docker (optional, for non-Windows systems)
+- Newtonsoft.Json
 
 ## Usage
 
@@ -111,3 +121,9 @@ Use the following configuration (with whitelisted QQ group IDs) to enable the wh
     345678912
 ]
 ```
+
+- meetings.config.json
+
+This file would be auto-written by sending invitation of Tencent Meeting to whitelisted (if enabled, if not, any) groups.
+
+You can also do some cleanups, removing unnecessary items from this file, to enhance the performance of the robot.

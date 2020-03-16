@@ -1,5 +1,4 @@
-﻿using System;
-namespace QQCourseBot
+﻿namespace QQCourseBot
 {
     public class GroupInfo
     {
