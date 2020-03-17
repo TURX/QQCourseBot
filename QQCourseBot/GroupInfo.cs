@@ -4,6 +4,7 @@
     {
         public int MessageCount = 1;
         public string LastMessage = string.Empty;
+        public int RepeatCount = 10;
         public bool Sent = false;
     }
 }
