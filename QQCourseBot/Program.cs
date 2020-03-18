@@ -128,7 +128,7 @@ namespace QQCourseBot
                     {
                         Groups.Add(me.group_id, new GroupInfo());
                     }
-                    if (ThisMessage.ToLower().Trim() == Groups[me.group_id].LastMessage)
+                    if (ThisMessage.ToLower().Trim() == Groups[me.group_id].LastMessage.ToLower().Trim())
                     {
                         Groups[me.group_id].MessageCount++;
                     }
@@ -138,7 +138,7 @@ namespace QQCourseBot
                         Groups[me.group_id].Sent = false;
                         Groups[me.group_id].RepeatCount = random.Next(2, 11);
                     }
-                    Groups[me.group_id].LastMessage = me.message.ToString().ToLower();
+                    Groups[me.group_id].LastMessage = ThisMessage;
                     Console.WriteLine("[INFO] Time: " + DateTime.Now + "; Count: " + Groups[me.group_id].MessageCount + "; GroupID: " + me.group_id + "; Message: " + ThisMessage);
                     if (ThisMessage.ToLower().Contains(Personal.Name) || ThisMessage.Contains("[CQ:at,qq=" + Personal.QQ + "]"))
                     {
