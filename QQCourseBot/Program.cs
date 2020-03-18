@@ -128,7 +128,7 @@ namespace QQCourseBot
                     {
                         Groups.Add(me.group_id, new GroupInfo());
                     }
-                    if (ThisMessage.ToLower() == Groups[me.group_id].LastMessage && !ThisMessage.Contains(' '))
+                    if (ThisMessage.ToLower().Trim() == Groups[me.group_id].LastMessage)
                     {
                         Groups[me.group_id].MessageCount++;
                     }
