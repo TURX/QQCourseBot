@@ -149,7 +149,7 @@ namespace QQCourseBot
                     if (ThisMessage.Contains("https://meeting.tencent.com"))
                     {
                         ThisMessage = ThisMessage.Replace("会议时间：", "会议时间:");
-                        if (ThisMessage.Contains("会议时间:") && ThisMessage.Contains("预定的会议"))
+                        if (ThisMessage.Contains("会议时间:"))
                         {
                             TencentScheduledMeeting meeting = new TencentScheduledMeeting();
                             int start = ThisMessage.IndexOf("会议时间:");
@@ -163,41 +163,46 @@ namespace QQCourseBot
                             meeting.StartTime = DateTime.Parse(date + " " + startTime);
                             meeting.StartTime = meeting.StartTime.AddMinutes(-random.Next(5, 20));
                             Console.WriteLine("[WEMEET] JoinTime: " + meeting.StartTime.ToString());
-                            start = end;
-                            end = ThisMessage.IndexOf("。", start);
-                            if (end == -1) end = ThisMessage.IndexOf("\r\n", start);
-                            if (end == -1) end = ThisMessage.IndexOf("\n", start);
-                            if (end == -1) end = ThisMessage.IndexOf("\r", start);
-                            string endTime = ThisMessage.Substring(start + 1, end - start - 1);
-                            Console.WriteLine("[WEMEET] EndTime: " + endTime);
-                            meeting.EndTime = DateTime.Parse(date + " " + endTime);
-                            start = ThisMessage.IndexOf("https://meeting.tencent.com");
-                            end = ThisMessage.Length;
-                            for (int i = start; i < ThisMessage.Length; i++)
+                            if (meeting.StartTime < DateTime.Now)
                             {
-                                if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                int s = ThisMessage.IndexOf("https://meeting.tencent.com");
+                                int t = ThisMessage.Length;
+                                for (int i = s; i < ThisMessage.Length; i++)
                                 {
-                                    end = i;
-                                    break;
+                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                    {
+                                        end = i;
+                                        break;
+                                    }
                                 }
+                                TencentMeeting.InvokeWemeet(ThisMessage.Substring(s, t - s));
+                                Console.WriteLine("[WEMEET] Launched");
                             }
-                            meeting.Url = ThisMessage.Substring(start, end - start);
-                            ScheduledMeetings.Add(meeting);
-                            File.WriteAllText("meetings.config.json", JsonConvert.SerializeObject(ScheduledMeetings));
-                            Console.WriteLine("[WEMEET] Scheduled");
-                        }
-                        else {
-                            int start = ThisMessage.IndexOf("https://meeting.tencent.com");
-                            int end = ThisMessage.Length;
-                            for (int i = start; i < ThisMessage.Length; i++)
+                            else
                             {
-                                if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                start = end;
+                                end = ThisMessage.IndexOf("。", start);
+                                if (end == -1) end = ThisMessage.IndexOf("\r\n", start);
+                                if (end == -1) end = ThisMessage.IndexOf("\n", start);
+                                if (end == -1) end = ThisMessage.IndexOf("\r", start);
+                                string endTime = ThisMessage.Substring(start + 1, end - start - 1);
+                                Console.WriteLine("[WEMEET] EndTime: " + endTime);
+                                meeting.EndTime = DateTime.Parse(date + " " + endTime);
+                                start = ThisMessage.IndexOf("https://meeting.tencent.com");
+                                end = ThisMessage.Length;
+                                for (int i = start; i < ThisMessage.Length; i++)
                                 {
-                                    end = i;
-                                    break;
+                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                    {
+                                        end = i;
+                                        break;
+                                    }
                                 }
+                                meeting.Url = ThisMessage.Substring(start, end - start);
+                                ScheduledMeetings.Add(meeting);
+                                File.WriteAllText("meetings.config.json", JsonConvert.SerializeObject(ScheduledMeetings));
+                                Console.WriteLine("[WEMEET] Scheduled");
                             }
-                            TencentMeeting.InvokeWemeet(ThisMessage.Substring(start, end - start));
                         }
                     }
                     if (ThisMessage.ToLower().Contains("please send"))
