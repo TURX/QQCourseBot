@@ -171,7 +171,7 @@ namespace QQCourseBot
                                 {
                                     if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
                                     {
-                                        end = i;
+                                        t = i;
                                         break;
                                     }
                                 }
@@ -203,6 +203,20 @@ namespace QQCourseBot
                                 File.WriteAllText("meetings.config.json", JsonConvert.SerializeObject(ScheduledMeetings));
                                 Console.WriteLine("[WEMEET] Scheduled");
                             }
+                        } else
+                        {
+                            int s = ThisMessage.IndexOf("https://meeting.tencent.com");
+                            int t = ThisMessage.Length;
+                            for (int i = s; i < ThisMessage.Length; i++)
+                            {
+                                if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                {
+                                    t = i;
+                                    break;
+                                }
+                            }
+                            TencentMeeting.InvokeWemeet(ThisMessage.Substring(s, t - s));
+                            Console.WriteLine("[WEMEET] Launched");
                         }
                     }
                     if (ThisMessage.ToLower().Contains("please send"))
