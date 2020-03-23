@@ -169,7 +169,7 @@ namespace QQCourseBot
                                 int t = ThisMessage.Length;
                                 for (int i = s; i < ThisMessage.Length; i++)
                                 {
-                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',' || ThisMessage[i] == '"')
                                     {
                                         t = i;
                                         break;
@@ -192,7 +192,7 @@ namespace QQCourseBot
                                 end = ThisMessage.Length;
                                 for (int i = start; i < ThisMessage.Length; i++)
                                 {
-                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                    if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',' || ThisMessage[i] == '"')
                                     {
                                         end = i;
                                         break;
@@ -209,7 +209,7 @@ namespace QQCourseBot
                             int t = ThisMessage.Length;
                             for (int i = s; i < ThisMessage.Length; i++)
                             {
-                                if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',')
+                                if (ThisMessage[i] == ' ' || ThisMessage[i] == '\n' || ThisMessage[i] == '\r' || ThisMessage[i] == ']' || ThisMessage[i] == ',' || ThisMessage[i] == '"')
                                 {
                                     t = i;
                                     break;
