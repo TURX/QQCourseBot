@@ -101,6 +101,7 @@ namespace QQCourseBot
                 if (e is GroupMessageEvent)
                 {
                     var me = (e as GroupMessageEvent);
+                    #region WhiteList
                     foreach (TencentScheduledMeeting i in ScheduledMeetings)
                     {
                         if (DateTime.Now < EndTime) break;
@@ -123,6 +124,8 @@ namespace QQCourseBot
                         }
                         if (!inWhiteList) return new EmptyResponse();
                     }
+                    #endregion
+                    #region Preparation
                     string ThisMessage = me.message.ToString();
                     if (!Groups.ContainsKey(me.group_id))
                     {
@@ -140,12 +143,16 @@ namespace QQCourseBot
                     }
                     Groups[me.group_id].LastMessage = ThisMessage;
                     Console.WriteLine("[INFO] Time: " + DateTime.Now + "; Count: " + Groups[me.group_id].MessageCount + "; GroupID: " + me.group_id + "; Message: " + ThisMessage);
+                    #endregion
+                    #region Mention
                     if (ThisMessage.ToLower().Contains(Personal.Name) || ThisMessage.Contains("[CQ:at,qq=" + Personal.QQ + "]"))
                     {
                         Console.WriteLine("[WARNING] You have been mentioned!!!");
                         Thread.Sleep(random.Next(3000, 6000));
                         Send(me.group_id, new Message(new ElementText(Mentioned())));
                     }
+                    #endregion
+                    #region Tencent Meeting
                     if (ThisMessage.Contains("https://meeting.tencent.com"))
                     {
                         ThisMessage = ThisMessage.Replace("会议时间：", "会议时间:");
@@ -219,6 +226,8 @@ namespace QQCourseBot
                             Console.WriteLine("[WEMEET] Launched");
                         }
                     }
+                    #endregion
+                    #region Please send
                     if (ThisMessage.ToLower().Contains("please send"))
                     {
                         int addLen;
@@ -261,10 +270,15 @@ namespace QQCourseBot
                         }
                         Groups[me.group_id].Sent = true;
                     }
-                    if (Groups[me.group_id].MessageCount == Groups[me.group_id].RepeatCount && !Groups[me.group_id].Sent)
+                    #endregion
+                    #region Repeat
+                    if (Groups[me.group_id].MessageCount == Groups[me.group_id].RepeatCount && !Groups[me.group_id].Sent && DateTime.Compare(DateTime.Now.AddMinutes(-5), Groups[me.group_id].LastRepeatTime) > 0)
                     {
                         Send(me.group_id, new Message(new ElementText(ThisMessage)));
+                        Groups[me.group_id].LastRepeatTime = DateTime.Now;
+                        Console.WriteLine("[REPEAT] Updated LastRepeatTime: " + Groups[me.group_id].LastRepeatTime);
                     }
+                    #endregion
                 }
                 return new EmptyResponse();
             };
